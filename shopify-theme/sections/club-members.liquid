@@ -183,14 +183,14 @@
             {%- if section.settings.instant_access -%}
               <p><strong>Bienvenue au Club!</strong></p>
               {%- if customer -%}
-                <p>Sie sind jetzt Mitglied. Laden Sie die Seite neu, um die Angebote zu sehen.</p>
+                <p>Du bist jetzt Mitglied. Lade die Seite neu, um die Angebote zu sehen.</p>
                 <a class="club-members__btn" href="{{ request.path }}">Zu den Angeboten</a>
               {%- else -%}
-                <p>Melden Sie sich jetzt mit Ihrer E-Mail-Adresse an – Sie erhalten einen Code per E-Mail, kein Passwort nötig.</p>
+                <p>Melde dich jetzt mit deiner E-Mail-Adresse an – du erhältst einen Code per E-Mail, kein Passwort nötig.</p>
                 <a class="club-members__btn" href="{{ login_url }}">Jetzt anmelden</a>
               {%- endif -%}
             {%- else -%}
-              <p><strong>Merci!</strong> Wir haben Ihre Anfrage erhalten und schalten Sie in Kürze frei.</p>
+              <p><strong>Merci!</strong> Wir haben deine Anfrage erhalten und schalten dich in Kürze frei.</p>
             {%- endif -%}
           </div>
         {%- else -%}
@@ -279,7 +279,7 @@
   "tag": "section",
   "settings": [
     { "type": "text", "id": "member_tag", "label": "Kunden-Tags für Mitglieder", "info": "Mehrere mit Komma trennen. Neue Anmeldungen erhalten das erste Tag.", "default": "club, Le Club du Vin" },
-    { "type": "richtext", "id": "member_intro", "label": "Begrüssungstext für Mitglieder", "default": "<p>Schön, dass Sie da sind. Hier finden Sie unsere aktuellen Club-Angebote und News – exklusiv unter Freunden.</p>" },
+    { "type": "richtext", "id": "member_intro", "label": "Begrüssungstext für Mitglieder", "default": "<p>Schön, dass du da bist. Hier findest du unsere aktuellen Club-Angebote und News – exklusiv unter Freunden.</p>" },
     { "type": "header", "content": "Exklusives Hauptangebot" },
     { "type": "image_picker", "id": "highlight_image", "label": "Bild" },
     { "type": "text", "id": "highlight_kicker", "label": "Etikett", "default": "Exklusiv für Clubmitglieder" },
@@ -298,8 +298,8 @@
     { "type": "range", "id": "news_limit", "label": "Maximale Anzahl", "min": 1, "max": 12, "step": 1, "default": 6 },
     { "type": "header", "content": "Für Nicht-Mitglieder / Anmeldung" },
     { "type": "text", "id": "guest_heading", "label": "Überschrift", "default": "Exklusive Angebote für Clubmitglieder" },
-    { "type": "richtext", "id": "guest_text", "label": "Text", "default": "<p>Werden Sie kostenlos Mitglied und sehen Sie unsere exklusiven Club-Angebote und News.</p>" },
-    { "type": "checkbox", "id": "instant_access", "label": "Selbstanmeldung schaltet sofort frei", "info": "Aus: Neue Anmeldungen erhalten das Tag „club-anfrage“ und werden erst freigeschaltet, wenn Sie im Admin das Tag „club“ setzen.", "default": true },
+    { "type": "richtext", "id": "guest_text", "label": "Text", "default": "<p>Werde kostenlos Mitglied und entdecke unsere exklusiven Club-Angebote und News.</p>" },
+    { "type": "checkbox", "id": "instant_access", "label": "Selbstanmeldung schaltet sofort frei", "info": "Aus: Neue Anmeldungen erhalten das Tag „club-anfrage“ und werden erst freigeschaltet, wenn du im Admin das Tag „club“ setzt.", "default": true },
     { "type": "text", "id": "consent_text", "label": "Text der Einwilligung", "default": "Ja, ich möchte Mitglied im Club du Vin werden und Club-Angebote und News per E-Mail erhalten." },
     { "type": "header", "content": "Farben" },
     { "type": "color", "id": "accent_color", "label": "Akzentfarbe", "default": "#a6247b" },
