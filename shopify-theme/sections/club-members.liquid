@@ -122,26 +122,66 @@
       {%- if news_shown == 0 -%}<p class="club-members__empty">Noch keine News aus dem Club.</p>{%- endif -%}
     </section>
 
-  {%- elsif customer -%}
-    <div class="club-members__gate">
-      <p class="club-members__eyebrow">Le Club du Vin</p>
-      <h2 class="club-members__title">Fast geschafft, {{ customer.first_name | default: 'chère amie, cher ami' | escape }}.</h2>
-      <p>Ihr Kundenkonto ist noch nicht für den Club freigeschaltet. Sobald wir Sie aufgenommen haben, sehen Sie hier die exklusiven Angebote und News.</p>
-      <div class="club-members__actions">
-        {%- if section.settings.join_link != blank -%}<a class="club-members__btn" href="{{ section.settings.join_link }}">Mitglied werden</a>{%- endif -%}
-        <a class="club-members__btn club-members__btn--ghost" href="mailto:{{ shop.email }}">Fragen? Schreiben Sie uns</a>
-      </div>
-    </div>
-
   {%- else -%}
+    {%- comment -%}
+      Selbstanmeldung: Das Shopify-Kundenformular legt den Kunden an (bzw. ergänzt ihn) und setzt
+      die Tags. Bei "sofort freischalten" ist das der Mitglieder-Tag, sonst ein Anfrage-Tag,
+      den Bouiboui im Admin durch "club" ersetzt.
+    {%- endcomment -%}
+    {%- liquid
+      if section.settings.instant_access
+        assign join_tags = 'newsletter, ' | append: member_tag
+      else
+        assign join_tags = 'newsletter, club-anfrage'
+      endif
+      assign login_url = routes.account_login_url | append: '?return_url=' | append: request.path
+    -%}
     <div class="club-members__gate">
       <p class="club-members__eyebrow">Le Club du Vin · nur für Mitglieder</p>
-      <h2 class="club-members__title">{{ section.settings.guest_heading | escape }}</h2>
+      <h2 class="club-members__title">
+        {%- if customer -%}Salut {{ customer.first_name | default: 'chère amie, cher ami' | escape }} – noch ein Klick.{%- else -%}{{ section.settings.guest_heading | escape }}{%- endif -%}
+      </h2>
       {%- if section.settings.guest_text != blank -%}<div>{{ section.settings.guest_text }}</div>{%- endif -%}
-      <div class="club-members__actions">
-        <a class="club-members__btn" href="{{ routes.account_login_url }}?return_url={{ request.path | url_encode }}">Anmelden</a>
-        {%- if section.settings.join_link != blank -%}<a class="club-members__btn club-members__btn--ghost" href="{{ section.settings.join_link }}">Mitglied werden</a>{%- endif -%}
-      </div>
+
+      {%- form 'customer', id: 'club-join-form', class: 'club-join' -%}
+        {%- if form.posted_successfully? -%}
+          <div class="club-join__success" role="status">
+            {%- if section.settings.instant_access -%}
+              <p><strong>Bienvenue au Club!</strong></p>
+              {%- if customer -%}
+                <p>Sie sind jetzt Mitglied. Laden Sie die Seite neu, um die Angebote zu sehen.</p>
+                <a class="club-members__btn" href="{{ request.path }}">Zu den Angeboten</a>
+              {%- else -%}
+                <p>Melden Sie sich jetzt mit Ihrer E-Mail-Adresse an – Sie erhalten einen Code per E-Mail, kein Passwort nötig.</p>
+                <a class="club-members__btn" href="{{ login_url }}">Jetzt anmelden</a>
+              {%- endif -%}
+            {%- else -%}
+              <p><strong>Merci!</strong> Wir haben Ihre Anfrage erhalten und schalten Sie in Kürze frei.</p>
+            {%- endif -%}
+          </div>
+        {%- else -%}
+          <input type="hidden" name="contact[tags]" value="{{ join_tags }}">
+          <input type="hidden" name="contact[accepts_marketing]" value="true">
+          {%- if customer -%}
+            <input type="hidden" name="contact[email]" value="{{ customer.email | escape }}">
+            <input type="hidden" name="contact[first_name]" value="{{ customer.first_name | escape }}">
+          {%- else -%}
+            <div class="club-join__fields">
+              <label>Vorname<input type="text" name="contact[first_name]" autocomplete="given-name" required></label>
+              <label>E-Mail<input type="email" name="contact[email]" autocomplete="email" required></label>
+            </div>
+          {%- endif -%}
+          <label class="club-join__consent"><input type="checkbox" required> {{ section.settings.consent_text | escape }}</label>
+          {%- if form.errors -%}<div class="club-join__error" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+          <button type="submit" class="club-members__btn">
+            {%- if section.settings.instant_access -%}Jetzt Mitglied werden{%- else -%}Mitgliedschaft anfragen{%- endif -%}
+          </button>
+        {%- endif -%}
+      {%- endform -%}
+
+      {%- unless customer -%}
+        <p class="club-members__login">Schon Mitglied? <a href="{{ login_url }}">Hier anmelden</a></p>
+      {%- endunless -%}
     </div>
   {%- endif -%}
 </div>
@@ -178,6 +218,17 @@
   #club-{{ section.id }} .club-members__gate { background: var(--club-panel); border-radius: 16px; padding: 2rem 1.5rem; text-align: center; max-width: 40rem; margin: 0 auto; }
   #club-{{ section.id }} .club-members__actions { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.25rem; }
   #club-{{ section.id }} .club-members__empty { font-style: italic; opacity: .7; }
+  #club-{{ section.id }} .club-join { margin-top: 1.25rem; display: grid; gap: .9rem; text-align: left; }
+  #club-{{ section.id }} .club-join__fields { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+  #club-{{ section.id }} .club-join__fields label { display: grid; gap: .3rem; font-size: .85rem; font-weight: 600; }
+  #club-{{ section.id }} .club-join__fields input { padding: .7rem .8rem; border: 1px solid rgba(0,0,0,.2); border-radius: 8px; font: inherit; background: #fff; width: 100%; }
+  #club-{{ section.id }} .club-join__consent { display: flex; gap: .5rem; align-items: flex-start; font-size: .85rem; }
+  #club-{{ section.id }} .club-join__consent input { margin-top: .2rem; }
+  #club-{{ section.id }} .club-join .club-members__btn { justify-self: center; }
+  #club-{{ section.id }} .club-join__success { text-align: center; }
+  #club-{{ section.id }} .club-join__error { color: #a3271f; font-size: .9rem; }
+  #club-{{ section.id }} .club-members__login { margin: 1.25rem 0 0; font-size: .9rem; }
+  #club-{{ section.id }} .club-members__login a { color: var(--club-accent); font-weight: 600; }
   @media (max-width: 599px) { #club-{{ section.id }} .club-news { grid-template-columns: 1fr; } }
 </style>
 
@@ -197,10 +248,11 @@
     { "type": "blog", "id": "blog", "label": "Blog" },
     { "type": "text", "id": "news_tag", "label": "Nur Beiträge mit diesem Tag", "default": "club" },
     { "type": "range", "id": "news_limit", "label": "Maximale Anzahl", "min": 1, "max": 12, "step": 1, "default": 6 },
-    { "type": "header", "content": "Für Gäste (nicht eingeloggt)" },
+    { "type": "header", "content": "Für Nicht-Mitglieder / Anmeldung" },
     { "type": "text", "id": "guest_heading", "label": "Überschrift", "default": "Exklusive Angebote für Clubmitglieder" },
-    { "type": "richtext", "id": "guest_text", "label": "Text", "default": "<p>Melden Sie sich mit Ihrem Kundenkonto an, um die aktuellen Club-Angebote und News zu sehen.</p>" },
-    { "type": "url", "id": "join_link", "label": "Link „Mitglied werden“" },
+    { "type": "richtext", "id": "guest_text", "label": "Text", "default": "<p>Werden Sie kostenlos Mitglied und sehen Sie unsere exklusiven Club-Angebote und News.</p>" },
+    { "type": "checkbox", "id": "instant_access", "label": "Selbstanmeldung schaltet sofort frei", "info": "Aus: Neue Anmeldungen erhalten das Tag „club-anfrage“ und werden erst freigeschaltet, wenn Sie im Admin das Tag „club“ setzen.", "default": true },
+    { "type": "text", "id": "consent_text", "label": "Text der Einwilligung", "default": "Ja, ich möchte Mitglied im Club du Vin werden und Club-Angebote und News per E-Mail erhalten." },
     { "type": "header", "content": "Farben" },
     { "type": "color", "id": "accent_color", "label": "Akzentfarbe", "default": "#a6247b" },
     { "type": "color", "id": "panel_color", "label": "Hintergrund der Karten", "default": "#f5f4f1" }

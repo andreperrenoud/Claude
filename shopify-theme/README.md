@@ -9,8 +9,8 @@ Dateien für das Theme „Lively“ von bouiboui.vin.
 
 | Besucher | sieht |
 |---|---|
-| nicht eingeloggt | Hinweis + Knopf „Anmelden“ / „Mitglied werden“ |
-| eingeloggt, ohne Tag `club` | „Ihr Konto ist noch nicht freigeschaltet“ |
+| nicht eingeloggt | Formular „Mitglied werden“ (Vorname, E-Mail, Einwilligung) + Link „Schon Mitglied? Hier anmelden“ |
+| eingeloggt, ohne Tag `club` | Ein-Klick-Knopf „Jetzt Mitglied werden“ |
 | eingeloggt mit Tag `club` | Angebote (Kollektion `club-du-vin-angebote`) und News (Blog `bouiboui-news`, Tag `club`) |
 
 ## Ein Angebot erstellen (pro Wein eigener Rabatt)
@@ -25,6 +25,15 @@ Dateien für das Theme „Lively“ von bouiboui.vin.
 
 Blogbeitrag in „Bouiboui.news“ schreiben und das Tag `club` setzen.
 
-## Mitglied freischalten
+## Selbstanmeldung
+
+Das Formular „Mitglied werden“ legt den Kunden in Shopify an (bzw. ergänzt ein bestehendes Konto)
+und setzt die Tags `newsletter` und `club`. Danach meldet man sich mit der E-Mail an
+(Shopify schickt einen Code, kein Passwort).
+
+Im Theme-Editor lässt sich „Selbstanmeldung schaltet sofort frei“ ausschalten. Dann erhalten neue
+Anmeldungen das Tag `club-anfrage`, und Sie schalten sie frei, indem Sie das Tag `club` setzen.
+
+## Mitglied von Hand freischalten
 
 Kunden → Kunde öffnen → Tag `club` hinzufügen.
