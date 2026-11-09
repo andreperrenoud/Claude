@@ -7,15 +7,19 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign member_tag = section.settings.member_tag | default: 'club' | downcase | strip
+  assign member_tags_raw = section.settings.member_tag | default: 'club' | downcase
+  assign member_tags = member_tags_raw | split: ','
+  assign member_tag = member_tags.first | strip
   assign is_member = false
   if customer
     for t in customer.tags
       assign tag_lc = t | downcase | strip
-      if tag_lc == member_tag
-        assign is_member = true
-        break
-      endif
+      for mt in member_tags
+        assign mt_clean = mt | strip
+        if tag_lc == mt_clean
+          assign is_member = true
+        endif
+      endfor
     endfor
   endif
   if request.design_mode
@@ -238,7 +242,7 @@
   "name": "Club du Vin – Mitglieder",
   "tag": "section",
   "settings": [
-    { "type": "text", "id": "member_tag", "label": "Kunden-Tag für Mitglieder", "default": "club" },
+    { "type": "text", "id": "member_tag", "label": "Kunden-Tags für Mitglieder", "info": "Mehrere mit Komma trennen. Neue Anmeldungen erhalten das erste Tag.", "default": "club, Le Club du Vin" },
     { "type": "richtext", "id": "member_intro", "label": "Begrüssungstext für Mitglieder", "default": "<p>Schön, dass Sie da sind. Hier finden Sie unsere aktuellen Club-Angebote und News – exklusiv unter Freunden.</p>" },
     { "type": "header", "content": "Angebote" },
     { "type": "text", "id": "offers_heading", "label": "Überschrift", "default": "Angebote für Mitglieder" },

@@ -11,7 +11,7 @@ Dateien für das Theme „Lively“ von bouiboui.vin.
 |---|---|
 | nicht eingeloggt | Formular „Mitglied werden“ (Vorname, E-Mail, Einwilligung) + Link „Schon Mitglied? Hier anmelden“ |
 | eingeloggt, ohne Tag `club` | Ein-Klick-Knopf „Jetzt Mitglied werden“ |
-| eingeloggt mit Tag `club` | Angebote (Kollektion `club-du-vin-angebote`) und News (Blog `bouiboui-news`, Tag `club`) |
+| eingeloggt mit Tag `club` oder `Le Club du Vin` | Angebote (Kollektion `club-du-vin-angebote`) und News (Blog `bouiboui-news`, Tag `club`) |
 
 ## Ein Angebot erstellen (pro Wein eigener Rabatt)
 
