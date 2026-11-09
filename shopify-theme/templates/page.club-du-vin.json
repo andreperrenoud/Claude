@@ -1,0 +1,164 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "center": false
+      }
+    },
+    "club_members": {
+      "type": "club-members",
+      "settings": {
+        "member_tag": "club",
+        "collection": "club-du-vin-angebote",
+        "blog": "bouiboui-news",
+        "news_tag": "club",
+        "join_link": "/pages/kontakt"
+      }
+    },
+    "marquee_CzHP96": {
+      "type": "marquee",
+      "blocks": {
+        "text_ng3KG8": {
+          "type": "text",
+          "settings": {
+            "marquee_text": "<em>Eine Premium-Weinreise durch die Provence  - Exklusiv für </em>"
+          }
+        }
+      },
+      "block_order": [
+        "text_ng3KG8"
+      ],
+      "disabled": true,
+      "name": "t:sections.local-extra-words.sections.marquee.name",
+      "settings": {
+        "scroll_direction": "left",
+        "speed": 100,
+        "pause_on_hover": true,
+        "horizontal_space": "1.1",
+        "text_size": "100",
+        "remove_top_margin": false,
+        "remove_bottom_margin": false,
+        "color_background_main": "#905dc9",
+        "section_background_gradient": "",
+        "color_text_main": "#dbb9b9",
+        "section_visibility": "always"
+      }
+    },
+    "1787317606a89268c0": {
+      "type": "_blocks",
+      "blocks": {
+        "empty_space_iFkPer": {
+          "type": "empty-space",
+          "name": "t:theme_blocks.empty-space.name",
+          "settings": {
+            "height": "20px"
+          },
+          "blocks": {}
+        },
+        "ai_gen_block_f545dd8_geei8C": {
+          "type": "ai_gen_block_f545dd8",
+          "name": "Magazinbeitrag",
+          "settings": {
+            "image": "shopify://shop_images/Karte_d02f0507-65ff-4de2-950d-04bf36a0e2c0.png",
+            "caption": "",
+            "kicker": "24. - 28. April 2027",
+            "title": "Rosé, Rot & Riviera",
+            "text": "<p>Eine Premium-Weinreise exklusiv für Bouiboui-Gäste. Jede Station ist mit Bedacht gewählt. Von den sanften Hügeln der Rhône bis an die glitzernde Küste der Côte d'Azur nehmen die Winzer und wir Sie mit auf eine Entdeckungsreise für den Gaumen – und Sie spüren in jedem Glas die Leidenschaft und die Philosophie, die dahinterstecken.</p>",
+            "link_label": "Zur Reise >>>",
+            "link": "shopify://pages/rose-rot-riviera",
+            "desktop_width_percent": 100,
+            "min_height": 600,
+            "heading_size": 56,
+            "heading_font": "dm_sans_n5",
+            "background_color": "#ffffff",
+            "panel_color": "#C2EA98",
+            "text_color": "#211f1d",
+            "accent_color": "#a6247b"
+          },
+          "blocks": {}
+        },
+        "divider_HRFDnM": {
+          "type": "divider",
+          "name": "t:divider.label",
+          "settings": {
+            "height": 1,
+            "width": "small",
+            "color": "#000000",
+            "style": "solid"
+          },
+          "blocks": {}
+        },
+        "ai_gen_block_f545dd8_nnbdUj": {
+          "type": "ai_gen_block_f545dd8",
+          "name": "Magazinbeitrag",
+          "settings": {
+            "image": "shopify://shop_images/SUZETTE_3.jpg",
+            "caption": "Ausgewählte Entdeckung",
+            "kicker": "Im Fokus: Piéblanc",
+            "title": "Geschichten, die im Glas beginnen",
+            "text": "<p>Drei Terroirs: Beaumes-de-Venise, Ventoux und Gigondas. Ein Triptychon, das einen Stil in drei Facetten entfaltet – Frische, Schlichtheit und die Freude daran, die Traube zu dem Wein zu begleiten, der aus ihr werden soll. Nur begleiten. Vom Verständnis der Böden bis zur Abfüllung. Und ein neuer Keller in Gigondas...</p>",
+            "link_label": "Jetzt zum Einführungspreis bestellen! >>>",
+            "link": "shopify://collections/domaine-de-pieblanc",
+            "desktop_width_percent": 100,
+            "min_height": 600,
+            "heading_size": 56,
+            "heading_font": "dm_sans_n5",
+            "background_color": "#ffffff",
+            "panel_color": "#f0d4ee",
+            "text_color": "#211f1d",
+            "accent_color": "#a6247b"
+          },
+          "blocks": {}
+        },
+        "ai_gen_block_0e05e02_jECNbK": {
+          "type": "ai_gen_block_0e05e02",
+          "name": "Magazinlayout",
+          "settings": {
+            "eyebrow": "",
+            "title": "",
+            "intro": "Entdecken Sie die Menschen, Orte und Ideen hinter den besonderen Weinen von Piéblanc.",
+            "link_label": "zum Einführungspreis bestellen >",
+            "card_1_image": "shopify://shop_images/A99A9968-Modifier.jpg",
+            "card_1_kicker": "Portrait",
+            "card_1_title": "Die Menschen hinter dem Wein",
+            "card_1_text": "Im Keller fiel die Entscheidung, die wichtigsten Cuvées ausschliesslich in Edelstahl- oder Betontanks zu vergären und auszubauen. Die Einzellagen-Weine hingegen reifen in Barriques oder in Amphoren. Nicht, um dem Wein neue Aromen zu verleihen oder ihn zu verändern, sondern um dem Ausdruck der ausgewählten Weine ein zusätzliches Mass an Eleganz und Tiefe zu geben. Diese Entscheidungen bilden das Grundgerüst des Weinguts und lassen den Ausdruck der Terroirs hervortreten.",
+            "card_1_link": "shopify://collections/domaine-de-pieblanc",
+            "card_2_image": "shopify://shop_images/GIGONDAS_2_e5377254-b3b7-46b5-bbdb-37ccdcdf4d3d.jpg",
+            "card_2_kicker": "Terroir",
+            "card_2_title": "Wenn Landschaft Geschmack wird",
+            "card_2_text": "Warum Boden, Klima und Zeit jede Flasche prägen. Deshalb wird ein Teil der Böden mit Pferd und Pflug bearbeitet, von Hand gelesen und das Lesegut so schonend wie möglich behandelt. Anschliessend wird es von Hand verlesen, so behutsam wie möglich durch Schwerkraft in den Tank gegeben und mit Feingefühl vinifiziert – ausschliesslich durch sanfte «Remontagen».",
+            "card_2_link": "shopify://collections/domaine-de-pieblanc",
+            "card_3_image": "shopify://shop_images/LE_DOMAINE.jpg",
+            "card_3_kicker": "Genuss",
+            "card_3_title": "Die Kunst des guten Moments",
+            "card_3_text": "« Die Traube ihrem eigenen Weg folgen lassen ». Das heisst: die Gesundheit ihres Ökosystems im Weinberg sichern, im genau richtigen Moment lesen, das Lesegut bei der Ankunft im Keller nicht misshandeln und es während Gärung und Ausbau möglichst wenig stören. \n\n\n\nLassen Sie sich überraschen, tauschen Sie sich aus, und finden Sie Ihren eigenen Zugang zu diesen Weinen. Denn am schönsten offenbart sich Piéblanc im Teilen – im Genuss, im Gespräch und in der Begegnung.",
+            "card_3_link": "shopify://collections/domaine-de-pieblanc",
+            "desktop_width_percent": 100,
+            "vertical_padding": 40,
+            "background_color": "#f5f4f1",
+            "heading_color": "#0a1550",
+            "text_color": "#211f1d",
+            "accent_color": "#7b0855",
+            "placeholder_color": "#e7e3dc"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "empty_space_iFkPer",
+        "ai_gen_block_f545dd8_geei8C",
+        "divider_HRFDnM",
+        "ai_gen_block_f545dd8_nnbdUj",
+        "ai_gen_block_0e05e02_jECNbK"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "club_members",
+    "marquee_CzHP96",
+    "1787317606a89268c0"
+  ]
+}

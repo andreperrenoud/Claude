@@ -1,0 +1,210 @@
+{%- comment -%}
+  Le Club du Vin – Mitgliederbereich
+  Zeigt eingeloggten Kunden mit dem Tag "club" die Club-Angebote (inkl. Clubpreis aus
+  dem Produkt-Metafeld custom.club_rabatt) und die Club-News (Blogbeiträge mit Tag "club").
+  Gäste sehen einen Login-Hinweis, eingeloggte Nicht-Mitglieder einen Hinweis zur Freischaltung.
+  Im Theme-Editor wird immer die Mitglieder-Ansicht gezeigt, damit man sie gestalten kann.
+{%- endcomment -%}
+
+{%- liquid
+  assign member_tag = section.settings.member_tag | default: 'club' | downcase | strip
+  assign is_member = false
+  if customer
+    for t in customer.tags
+      assign tag_lc = t | downcase | strip
+      if tag_lc == member_tag
+        assign is_member = true
+        break
+      endif
+    endfor
+  endif
+  if request.design_mode
+    assign is_member = true
+  endif
+
+  assign offers = section.settings.collection
+  assign news_blog = section.settings.blog
+  assign news_tag = section.settings.news_tag | default: 'club' | downcase | strip
+-%}
+
+<div id="club-{{ section.id }}" class="club-members container container--large container--vertical-space-small">
+  {%- if is_member -%}
+    <header class="club-members__hello">
+      <p class="club-members__eyebrow">Le Club du Vin</p>
+      <h2 class="club-members__title">
+        {%- if customer and customer.first_name != blank -%}Salut {{ customer.first_name | escape }}!{%- else -%}Willkommen im Club!{%- endif -%}
+      </h2>
+      {%- if section.settings.member_intro != blank -%}<div class="club-members__intro">{{ section.settings.member_intro }}</div>{%- endif -%}
+    </header>
+
+    {%- comment -%} ---------- Angebote ---------- {%- endcomment -%}
+    <section class="club-members__block" aria-labelledby="club-offers-{{ section.id }}">
+      <h3 id="club-offers-{{ section.id }}" class="club-members__heading">{{ section.settings.offers_heading | escape }}</h3>
+      {%- assign shown = 0 -%}
+      <div class="club-members__grid">
+        {%- if offers != blank -%}
+          {%- for product in offers.products limit: section.settings.offers_limit -%}
+            {%- assign shown = shown | plus: 1 -%}
+            {%- assign variant = product.selected_or_first_available_variant -%}
+            {%- assign rabatt = product.metafields.custom.club_rabatt.value | default: 0 -%}
+            {%- assign club_price = variant.price -%}
+            {%- if rabatt > 0 -%}
+              {%- assign factor = 100 | minus: rabatt -%}
+              {%- assign club_price = variant.price | times: factor | divided_by: 100 -%}
+            {%- endif -%}
+            <article class="club-card">
+              <a href="{{ product.url }}" class="club-card__media">
+                {%- if product.featured_image -%}
+                  {{ product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 600, 800', sizes: '(min-width: 990px) 33vw, (min-width: 600px) 50vw, 100vw', alt: product.featured_image.alt | default: product.title }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'club-card__placeholder' }}
+                {%- endif -%}
+                {%- if rabatt > 0 -%}<span class="club-card__badge">−{{ rabatt }}% Club</span>{%- endif -%}
+              </a>
+              <div class="club-card__body">
+                <h4 class="club-card__title"><a href="{{ product.url }}">{{ product.title | escape }}</a></h4>
+                <p class="club-card__price">
+                  {%- if rabatt > 0 -%}
+                    <span class="club-card__club-price">{{ club_price | money }}</span>
+                    <s class="club-card__regular">{{ variant.price | money }}</s>
+                    <span class="club-card__note">Clubpreis – Rabatt wird im Warenkorb abgezogen</span>
+                  {%- else -%}
+                    <span class="club-card__club-price">{{ variant.price | money }}</span>
+                  {%- endif -%}
+                </p>
+                {%- if product.available -%}
+                  <form action="{{ routes.cart_add_url }}" method="post" class="club-card__form">
+                    <input type="hidden" name="id" value="{{ variant.id }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="club-members__btn">In den Warenkorb</button>
+                  </form>
+                {%- else -%}
+                  <p class="club-card__soldout">Ausgetrunken – bald wieder da.</p>
+                {%- endif -%}
+              </div>
+            </article>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+      {%- if shown == 0 -%}<p class="club-members__empty">Gerade keine Angebote – bald wird wieder geschmuggelt.</p>{%- endif -%}
+    </section>
+
+    {%- comment -%} ---------- News ---------- {%- endcomment -%}
+    <section class="club-members__block" aria-labelledby="club-news-{{ section.id }}">
+      <h3 id="club-news-{{ section.id }}" class="club-members__heading">{{ section.settings.news_heading | escape }}</h3>
+      {%- assign news_shown = 0 -%}
+      <div class="club-members__news">
+        {%- if news_blog != blank -%}
+          {%- for article in news_blog.articles -%}
+            {%- if news_shown >= section.settings.news_limit -%}{%- break -%}{%- endif -%}
+            {%- assign has_tag = false -%}
+            {%- for t in article.tags -%}
+              {%- assign t_lc = t | downcase | strip -%}
+              {%- if t_lc == news_tag -%}{%- assign has_tag = true -%}{%- break -%}{%- endif -%}
+            {%- endfor -%}
+            {%- if has_tag -%}
+              {%- assign news_shown = news_shown | plus: 1 -%}
+              <article class="club-news">
+                {%- if article.image -%}
+                  <a href="{{ article.url }}" class="club-news__media">{{ article.image | image_url: width: 600 | image_tag: loading: 'lazy', alt: article.image.alt | default: article.title }}</a>
+                {%- endif -%}
+                <div class="club-news__body">
+                  <p class="club-news__date">{{ article.published_at | date: '%d.%m.%Y' }}</p>
+                  <h4 class="club-news__title"><a href="{{ article.url }}">{{ article.title | escape }}</a></h4>
+                  <p class="club-news__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 30 }}</p>
+                  <a href="{{ article.url }}" class="club-news__more">Weiterlesen &gt;&gt;&gt;</a>
+                </div>
+              </article>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+      {%- if news_shown == 0 -%}<p class="club-members__empty">Noch keine News aus dem Club.</p>{%- endif -%}
+    </section>
+
+  {%- elsif customer -%}
+    <div class="club-members__gate">
+      <p class="club-members__eyebrow">Le Club du Vin</p>
+      <h2 class="club-members__title">Fast geschafft, {{ customer.first_name | default: 'chère amie, cher ami' | escape }}.</h2>
+      <p>Ihr Kundenkonto ist noch nicht für den Club freigeschaltet. Sobald wir Sie aufgenommen haben, sehen Sie hier die exklusiven Angebote und News.</p>
+      <div class="club-members__actions">
+        {%- if section.settings.join_link != blank -%}<a class="club-members__btn" href="{{ section.settings.join_link }}">Mitglied werden</a>{%- endif -%}
+        <a class="club-members__btn club-members__btn--ghost" href="mailto:{{ shop.email }}">Fragen? Schreiben Sie uns</a>
+      </div>
+    </div>
+
+  {%- else -%}
+    <div class="club-members__gate">
+      <p class="club-members__eyebrow">Le Club du Vin · nur für Mitglieder</p>
+      <h2 class="club-members__title">{{ section.settings.guest_heading | escape }}</h2>
+      {%- if section.settings.guest_text != blank -%}<div>{{ section.settings.guest_text }}</div>{%- endif -%}
+      <div class="club-members__actions">
+        <a class="club-members__btn" href="{{ routes.account_login_url }}?return_url={{ request.path | url_encode }}">Anmelden</a>
+        {%- if section.settings.join_link != blank -%}<a class="club-members__btn club-members__btn--ghost" href="{{ section.settings.join_link }}">Mitglied werden</a>{%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+<style>
+  #club-{{ section.id }} { --club-accent: {{ section.settings.accent_color }}; --club-panel: {{ section.settings.panel_color }}; }
+  #club-{{ section.id }} .club-members__eyebrow { text-transform: uppercase; letter-spacing: .18em; font-size: .75rem; opacity: .7; margin: 0 0 .5rem; }
+  #club-{{ section.id }} .club-members__title { margin: 0 0 1rem; }
+  #club-{{ section.id }} .club-members__intro { max-width: 46rem; margin-bottom: 1rem; }
+  #club-{{ section.id }} .club-members__block { margin-top: 2.5rem; }
+  #club-{{ section.id }} .club-members__heading { border-bottom: 1px solid currentColor; padding-bottom: .5rem; margin-bottom: 1.25rem; }
+  #club-{{ section.id }} .club-members__grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
+  #club-{{ section.id }} .club-card { background: var(--club-panel); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+  #club-{{ section.id }} .club-card__media { position: relative; display: block; aspect-ratio: 4 / 5; background: #fff; }
+  #club-{{ section.id }} .club-card__media img, #club-{{ section.id }} .club-card__placeholder { width: 100%; height: 100%; object-fit: contain; display: block; }
+  #club-{{ section.id }} .club-card__badge { position: absolute; top: .75rem; left: .75rem; background: var(--club-accent); color: #fff; font-weight: 600; font-size: .85rem; padding: .25rem .6rem; border-radius: 999px; }
+  #club-{{ section.id }} .club-card__body { padding: 1rem 1.25rem 1.25rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
+  #club-{{ section.id }} .club-card__title { margin: 0; font-size: 1.1rem; }
+  #club-{{ section.id }} .club-card__title a, #club-{{ section.id }} .club-news__title a { color: inherit; text-decoration: none; }
+  #club-{{ section.id }} .club-card__price { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .6rem; }
+  #club-{{ section.id }} .club-card__club-price { color: var(--club-accent); font-weight: 700; font-size: 1.25rem; }
+  #club-{{ section.id }} .club-card__regular { opacity: .6; }
+  #club-{{ section.id }} .club-card__note { flex-basis: 100%; font-size: .75rem; opacity: .7; }
+  #club-{{ section.id }} .club-card__form { margin-top: auto; }
+  #club-{{ section.id }} .club-members__btn { display: inline-block; background: var(--club-accent); color: #fff; border: 1px solid var(--club-accent); border-radius: 999px; padding: .7rem 1.4rem; font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; }
+  #club-{{ section.id }} .club-members__btn--ghost { background: transparent; color: var(--club-accent); }
+  #club-{{ section.id }} .club-members__news { display: grid; gap: 1.5rem; }
+  #club-{{ section.id }} .club-news { display: grid; grid-template-columns: minmax(0, 220px) 1fr; gap: 1.25rem; align-items: start; }
+  #club-{{ section.id }} .club-news__media img { width: 100%; border-radius: 10px; display: block; }
+  #club-{{ section.id }} .club-news__date { font-size: .8rem; opacity: .7; margin: 0; }
+  #club-{{ section.id }} .club-news__title { margin: .25rem 0 .5rem; }
+  #club-{{ section.id }} .club-news__excerpt { margin: 0 0 .5rem; }
+  #club-{{ section.id }} .club-news__more { color: var(--club-accent); font-weight: 600; }
+  #club-{{ section.id }} .club-members__gate { background: var(--club-panel); border-radius: 16px; padding: 2rem 1.5rem; text-align: center; max-width: 40rem; margin: 0 auto; }
+  #club-{{ section.id }} .club-members__actions { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.25rem; }
+  #club-{{ section.id }} .club-members__empty { font-style: italic; opacity: .7; }
+  @media (max-width: 599px) { #club-{{ section.id }} .club-news { grid-template-columns: 1fr; } }
+</style>
+
+{% schema %}
+{
+  "name": "Club du Vin – Mitglieder",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "member_tag", "label": "Kunden-Tag für Mitglieder", "default": "club" },
+    { "type": "richtext", "id": "member_intro", "label": "Begrüssungstext für Mitglieder", "default": "<p>Schön, dass Sie da sind. Hier finden Sie unsere aktuellen Club-Angebote und News – exklusiv unter Freunden.</p>" },
+    { "type": "header", "content": "Angebote" },
+    { "type": "text", "id": "offers_heading", "label": "Überschrift", "default": "Angebote für Mitglieder" },
+    { "type": "collection", "id": "collection", "label": "Kollektion mit den Club-Angeboten" },
+    { "type": "range", "id": "offers_limit", "label": "Maximale Anzahl", "min": 2, "max": 24, "step": 1, "default": 12 },
+    { "type": "header", "content": "News" },
+    { "type": "text", "id": "news_heading", "label": "Überschrift", "default": "News aus dem Club" },
+    { "type": "blog", "id": "blog", "label": "Blog" },
+    { "type": "text", "id": "news_tag", "label": "Nur Beiträge mit diesem Tag", "default": "club" },
+    { "type": "range", "id": "news_limit", "label": "Maximale Anzahl", "min": 1, "max": 12, "step": 1, "default": 6 },
+    { "type": "header", "content": "Für Gäste (nicht eingeloggt)" },
+    { "type": "text", "id": "guest_heading", "label": "Überschrift", "default": "Exklusive Angebote für Clubmitglieder" },
+    { "type": "richtext", "id": "guest_text", "label": "Text", "default": "<p>Melden Sie sich mit Ihrem Kundenkonto an, um die aktuellen Club-Angebote und News zu sehen.</p>" },
+    { "type": "url", "id": "join_link", "label": "Link „Mitglied werden“" },
+    { "type": "header", "content": "Farben" },
+    { "type": "color", "id": "accent_color", "label": "Akzentfarbe", "default": "#a6247b" },
+    { "type": "color", "id": "panel_color", "label": "Hintergrund der Karten", "default": "#f5f4f1" }
+  ],
+  "presets": [{ "name": "Club du Vin – Mitglieder" }]
+}
+{% endschema %}
