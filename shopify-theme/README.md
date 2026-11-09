@@ -16,9 +16,11 @@ Dateien für das Theme „Lively“ von bouiboui.vin.
 ## Ein Angebot erstellen (pro Wein eigener Rabatt)
 
 1. Produkt zur Kollektion **„Club du Vin – Angebote“** hinzufügen.
-2. Im Produkt das Feld **„Clubrabatt (%)“** ausfüllen → Clubpreis wird auf der Seite angezeigt.
+2. Im Produkt **entweder** „Clubpreis (CHF)“ (fester Preis, z. B. 18.90 – Badge „Clubpreis“)
+   **oder** „Clubrabatt (%)“ (Badge „−20% Club“) ausfüllen. Der feste Preis hat Vorrang.
 3. **Rabatte → Rabatt erstellen → „Betrag von Produkten“ → Automatischer Rabatt**,
-   gleicher Prozentsatz, nur dieses Produkt, Berechtigung: Kundensegment **„Club du Vin“**.
+   gleicher Betrag bzw. Prozentsatz (bei festem Preis: Differenz pro Artikel),
+   nur dieses Produkt, Berechtigung: Kundensegment **„Club du Vin“**.
    → Der Rabatt wird im Warenkorb nur bei Mitgliedern abgezogen.
 
 ## News veröffentlichen

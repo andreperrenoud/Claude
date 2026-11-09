@@ -71,10 +71,18 @@
             {%- assign shown = shown | plus: 1 -%}
             {%- assign variant = product.selected_or_first_available_variant -%}
             {%- assign rabatt = product.metafields.custom.club_rabatt.value | default: 0 -%}
+            {%- assign fixed_price = product.metafields.custom.club_preis.value -%}
             {%- assign club_price = variant.price -%}
-            {%- if rabatt > 0 -%}
+            {%- assign has_club_price = false -%}
+            {%- assign badge = '' -%}
+            {%- if fixed_price != blank -%}
+              {%- assign club_price = fixed_price | times: 100 | round -%}
+              {%- if club_price < variant.price -%}{%- assign has_club_price = true -%}{%- assign badge = 'Clubpreis' -%}{%- endif -%}
+            {%- elsif rabatt > 0 -%}
               {%- assign factor = 100 | minus: rabatt -%}
               {%- assign club_price = variant.price | times: factor | divided_by: 100 -%}
+              {%- assign has_club_price = true -%}
+              {%- assign badge = '−' | append: rabatt | append: '% Club' -%}
             {%- endif -%}
             <article class="club-card">
               <a href="{{ product.url }}" class="club-card__media">
@@ -83,12 +91,12 @@
                 {%- else -%}
                   {{ 'product-1' | placeholder_svg_tag: 'club-card__placeholder' }}
                 {%- endif -%}
-                {%- if rabatt > 0 -%}<span class="club-card__badge">−{{ rabatt }}% Club</span>{%- endif -%}
+                {%- if has_club_price -%}<span class="club-card__badge">{{ badge }}</span>{%- endif -%}
               </a>
               <div class="club-card__body">
                 <h4 class="club-card__title"><a href="{{ product.url }}">{{ product.title | escape }}</a></h4>
                 <p class="club-card__price">
-                  {%- if rabatt > 0 -%}
+                  {%- if has_club_price -%}
                     <span class="club-card__club-price">{{ club_price | money }}</span>
                     <s class="club-card__regular">{{ variant.price | money }}</s>
                     <span class="club-card__note">Clubpreis – Rabatt wird im Warenkorb abgezogen</span>
