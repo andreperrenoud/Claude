@@ -1,0 +1,3 @@
+/* Rosa gefüllter Stern beim Kopfzeilen-Eintrag „Le Club du Vin“.
+   Liegt im Theme als custom_css der Kopfzeile (sections/header-group.json). */
+.header-info-block[href*="club-du-vin"] svg path { fill: #f5a3c7 !important; }
