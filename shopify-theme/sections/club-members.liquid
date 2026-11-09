@@ -122,38 +122,41 @@
     </section>
     {%- endif -%}
 
-    {%- comment -%} ---------- News ---------- {%- endcomment -%}
-    <section class="club-members__block" aria-labelledby="club-news-{{ section.id }}">
-      <h3 id="club-news-{{ section.id }}" class="club-members__heading">{{ section.settings.news_heading | escape }}</h3>
-      {%- assign news_shown = 0 -%}
-      <div class="club-members__news">
-        {%- if news_blog != blank -%}
-          {%- for article in news_blog.articles -%}
-            {%- if news_shown >= section.settings.news_limit -%}{%- break -%}{%- endif -%}
-            {%- assign has_tag = false -%}
-            {%- for t in article.tags -%}
-              {%- assign t_lc = t | downcase | strip -%}
-              {%- if t_lc == news_tag -%}{%- assign has_tag = true -%}{%- break -%}{%- endif -%}
-            {%- endfor -%}
-            {%- if has_tag -%}
-              {%- assign news_shown = news_shown | plus: 1 -%}
-              <article class="club-news">
-                {%- if article.image -%}
-                  <a href="{{ article.url }}" class="club-news__media">{{ article.image | image_url: width: 600 | image_tag: loading: 'lazy', alt: article.image.alt | default: article.title }}</a>
-                {%- endif -%}
-                <div class="club-news__body">
-                  <p class="club-news__date">{{ article.published_at | date: '%d.%m.%Y' }}</p>
-                  <h4 class="club-news__title"><a href="{{ article.url }}">{{ article.title | escape }}</a></h4>
-                  <p class="club-news__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 30 }}</p>
-                  <a href="{{ article.url }}" class="club-news__more">Weiterlesen &gt;&gt;&gt;</a>
-                </div>
-              </article>
-            {%- endif -%}
+    {%- comment -%} ---------- News (nur sichtbar, wenn es Club-News gibt) ---------- {%- endcomment -%}
+    {%- capture news_items -%}
+      {%- if news_blog != blank -%}
+        {%- assign news_shown = 0 -%}
+        {%- for article in news_blog.articles -%}
+          {%- if news_shown >= section.settings.news_limit -%}{%- break -%}{%- endif -%}
+          {%- assign has_tag = false -%}
+          {%- for t in article.tags -%}
+            {%- assign t_lc = t | downcase | strip -%}
+            {%- if t_lc == news_tag -%}{%- assign has_tag = true -%}{%- break -%}{%- endif -%}
           {%- endfor -%}
-        {%- endif -%}
-      </div>
-      {%- if news_shown == 0 -%}<p class="club-members__empty">Noch keine News aus dem Club.</p>{%- endif -%}
-    </section>
+          {%- if has_tag -%}
+            {%- assign news_shown = news_shown | plus: 1 -%}
+            <article class="club-news">
+              {%- if article.image -%}
+                <a href="{{ article.url }}" class="club-news__media">{{ article.image | image_url: width: 600 | image_tag: loading: 'lazy', alt: article.image.alt | default: article.title }}</a>
+              {%- endif -%}
+              <div class="club-news__body">
+                <p class="club-news__date">{{ article.published_at | date: '%d.%m.%Y' }}</p>
+                <h4 class="club-news__title"><a href="{{ article.url }}">{{ article.title | escape }}</a></h4>
+                <p class="club-news__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 30 }}</p>
+                <a href="{{ article.url }}" class="club-news__more">Weiterlesen &gt;&gt;&gt;</a>
+              </div>
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endcapture -%}
+    {%- assign news_items = news_items | strip -%}
+    {%- if news_items != blank -%}
+      <section class="club-members__block" aria-labelledby="club-news-{{ section.id }}">
+        <h3 id="club-news-{{ section.id }}" class="club-members__heading">{{ section.settings.news_heading | escape }}</h3>
+        <div class="club-members__news">{{ news_items }}</div>
+      </section>
+    {%- endif -%}
 
   {%- else -%}
     {%- comment -%}
