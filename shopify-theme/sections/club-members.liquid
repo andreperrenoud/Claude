@@ -134,7 +134,8 @@
       else
         assign join_tags = 'newsletter, club-anfrage'
       endif
-      assign login_url = routes.account_login_url | append: '?return_url=' | append: request.path
+      assign return_path = request.path | url_encode
+      assign login_url = '/customer_authentication/login?return_to=' | append: return_path
     -%}
     <div class="club-members__gate">
       <p class="club-members__eyebrow">Le Club du Vin · nur für Mitglieder</p>
