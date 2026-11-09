@@ -41,7 +41,27 @@
       {%- if section.settings.member_intro != blank -%}<div class="club-members__intro">{{ section.settings.member_intro }}</div>{%- endif -%}
     </header>
 
-    {%- comment -%} ---------- Angebote ---------- {%- endcomment -%}
+    {%- comment -%} ---------- Exklusives Hauptangebot (z. B. Weinreise) ---------- {%- endcomment -%}
+    {%- if section.settings.highlight_title != blank -%}
+      <article class="club-highlight">
+        {%- if section.settings.highlight_image != blank -%}
+          <div class="club-highlight__media">{{ section.settings.highlight_image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '500, 800, 1000', sizes: '(min-width: 750px) 45vw, 100vw' }}</div>
+        {%- endif -%}
+        <div class="club-highlight__body">
+          {%- if section.settings.highlight_kicker != blank -%}<p class="club-highlight__kicker">{{ section.settings.highlight_kicker | escape }}</p>{%- endif -%}
+          <h3 class="club-highlight__title">{{ section.settings.highlight_title | escape }}</h3>
+          {%- if section.settings.highlight_text != blank -%}<div class="club-highlight__text">{{ section.settings.highlight_text }}</div>{%- endif -%}
+          {%- if section.settings.highlight_link != blank -%}
+            <a class="club-members__btn" href="{{ section.settings.highlight_link }}">{{ section.settings.highlight_label | default: 'Mehr erfahren' | escape }}</a>
+          {%- endif -%}
+        </div>
+      </article>
+    {%- endif -%}
+
+    {%- comment -%} ---------- Angebote (Produkte) ---------- {%- endcomment -%}
+    {%- assign offers_count = 0 -%}
+    {%- if offers != blank -%}{%- assign offers_count = offers.products_count -%}{%- endif -%}
+    {%- if offers_count > 0 or section.settings.highlight_title == blank -%}
     <section class="club-members__block" aria-labelledby="club-offers-{{ section.id }}">
       <h3 id="club-offers-{{ section.id }}" class="club-members__heading">{{ section.settings.offers_heading | escape }}</h3>
       {%- assign shown = 0 -%}
@@ -92,6 +112,7 @@
       </div>
       {%- if shown == 0 -%}<p class="club-members__empty">Gerade keine Angebote – bald wird wieder geschmuggelt.</p>{%- endif -%}
     </section>
+    {%- endif -%}
 
     {%- comment -%} ---------- News ---------- {%- endcomment -%}
     <section class="club-members__block" aria-labelledby="club-news-{{ section.id }}">
@@ -234,6 +255,13 @@
   #club-{{ section.id }} .club-join__error { color: #a3271f; font-size: .9rem; }
   #club-{{ section.id }} .club-members__login { margin: 1.25rem 0 0; font-size: .9rem; }
   #club-{{ section.id }} .club-members__login a { color: var(--club-accent); font-weight: 600; }
+  #club-{{ section.id }} .club-highlight { display: grid; grid-template-columns: 1fr; background: var(--club-panel); border-radius: 16px; overflow: hidden; margin-top: 1.5rem; border: 2px solid var(--club-accent); }
+  #club-{{ section.id }} .club-highlight__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  #club-{{ section.id }} .club-highlight__body { padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem; align-items: flex-start; justify-content: center; }
+  #club-{{ section.id }} .club-highlight__kicker { margin: 0; display: inline-block; background: var(--club-accent); color: #fff; font-weight: 600; font-size: .8rem; padding: .25rem .7rem; border-radius: 999px; }
+  #club-{{ section.id }} .club-highlight__title { margin: 0; font-size: clamp(1.4rem, 3vw, 2rem); }
+  #club-{{ section.id }} .club-highlight__text p { margin: 0 0 .5rem; }
+  @media (min-width: 750px) { #club-{{ section.id }} .club-highlight { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 599px) { #club-{{ section.id }} .club-news { grid-template-columns: 1fr; } }
 </style>
 
@@ -244,6 +272,13 @@
   "settings": [
     { "type": "text", "id": "member_tag", "label": "Kunden-Tags für Mitglieder", "info": "Mehrere mit Komma trennen. Neue Anmeldungen erhalten das erste Tag.", "default": "club, Le Club du Vin" },
     { "type": "richtext", "id": "member_intro", "label": "Begrüssungstext für Mitglieder", "default": "<p>Schön, dass Sie da sind. Hier finden Sie unsere aktuellen Club-Angebote und News – exklusiv unter Freunden.</p>" },
+    { "type": "header", "content": "Exklusives Hauptangebot" },
+    { "type": "image_picker", "id": "highlight_image", "label": "Bild" },
+    { "type": "text", "id": "highlight_kicker", "label": "Etikett", "default": "Exklusiv für Clubmitglieder" },
+    { "type": "text", "id": "highlight_title", "label": "Titel", "info": "Leer lassen, um den Kasten auszublenden." },
+    { "type": "richtext", "id": "highlight_text", "label": "Text" },
+    { "type": "url", "id": "highlight_link", "label": "Link" },
+    { "type": "text", "id": "highlight_label", "label": "Knopf-Text", "default": "Mehr erfahren" },
     { "type": "header", "content": "Angebote" },
     { "type": "text", "id": "offers_heading", "label": "Überschrift", "default": "Angebote für Mitglieder" },
     { "type": "collection", "id": "collection", "label": "Kollektion mit den Club-Angeboten" },
