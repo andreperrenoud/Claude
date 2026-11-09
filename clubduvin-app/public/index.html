@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Le Club du Vin · Bouiboui.vin</title>
+  <meta name="theme-color" content="#6e1c35">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- Login -->
+  <section id="view-login" class="login" hidden>
+    <div class="login-card">
+      <p class="eyebrow">Bouiboui.vin</p>
+      <h1>Le Club du Vin</h1>
+      <p class="tagline">traffiquant d'amour.</p>
+      <p class="muted">Wir schmuggeln die Provence zu Ihnen nach Hause. Unter Freunden, ganz exklusiv.</p>
+      <form id="login-form">
+        <label>E-Mail <input type="email" name="email" autocomplete="username" required></label>
+        <label>Passwort <input type="password" name="password" autocomplete="current-password" required></label>
+        <p class="error" id="login-error" role="alert"></p>
+        <button class="btn primary" type="submit">Anmelden</button>
+      </form>
+      <p class="small muted">Noch kein Zugang? Schreiben Sie uns an <a href="mailto:mail@bouiboui.vin">mail@bouiboui.vin</a>.</p>
+    </div>
+  </section>
+
+  <!-- App -->
+  <div id="view-app" hidden>
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">B</span><div><strong>Le Club du Vin</strong><span class="small muted" id="hello"></span></div></div>
+      <button class="btn ghost" id="logout">Abmelden</button>
+    </header>
+
+    <main>
+      <section data-tab="offers" class="tab">
+        <h2>Angebote <em>für Mitglieder</em></h2>
+        <div class="list" id="list-offer"></div>
+      </section>
+      <section data-tab="news" class="tab" hidden>
+        <h2>News <em>aus dem Club</em></h2>
+        <div class="list" id="list-news"></div>
+      </section>
+      <section data-tab="account" class="tab" hidden>
+        <h2>Mein Konto</h2>
+        <div class="panel">
+          <p id="account-info"></p>
+          <form id="pw-form" class="stack">
+            <h3>Passwort ändern</h3>
+            <p class="notice" id="pw-notice" hidden>Bitte vergeben Sie ein eigenes Passwort.</p>
+            <label>Aktuelles Passwort <input type="password" name="current" autocomplete="current-password" required></label>
+            <label>Neues Passwort (min. 8 Zeichen) <input type="password" name="next" minlength="8" autocomplete="new-password" required></label>
+            <p class="error" id="pw-msg" role="status"></p>
+            <button class="btn primary">Speichern</button>
+          </form>
+        </div>
+      </section>
+
+      <section data-tab="admin" class="tab" hidden>
+        <h2>Verwaltung</h2>
+        <div class="panel">
+          <form id="post-form" class="stack">
+            <h3 id="post-form-title">Neuer Beitrag</h3>
+            <input type="hidden" name="id">
+            <div class="seg">
+              <label><input type="radio" name="kind" value="offer" checked> Angebot</label>
+              <label><input type="radio" name="kind" value="news"> News</label>
+            </div>
+            <label>Titel <input name="title" maxlength="200" required></label>
+            <label>Text <textarea name="body" rows="5"></textarea></label>
+            <div class="row">
+              <label class="offer-only">Preis (z. B. CHF 24.–) <input name="price" maxlength="50"></label>
+              <label class="offer-only">Gültig bis <input type="date" name="valid_until"></label>
+            </div>
+            <label>Bild-URL <input type="url" name="image_url" placeholder="https://cdn.shopify.com/…"></label>
+            <label>Link (z. B. Produkt im Shop) <input type="url" name="link_url" placeholder="https://bouiboui.vin/products/…"></label>
+            <label class="check"><input type="checkbox" name="pinned"> Oben anheften</label>
+            <p class="error" id="post-msg" role="status"></p>
+            <div class="row">
+              <button class="btn primary">Veröffentlichen</button>
+              <button class="btn ghost" type="button" id="post-cancel" hidden>Abbrechen</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <form id="member-form" class="stack">
+            <h3>Mitglied hinzufügen</h3>
+            <div class="row">
+              <label>Name <input name="name" required></label>
+              <label>E-Mail <input type="email" name="email" required></label>
+            </div>
+            <label class="check"><input type="checkbox" name="admin"> Darf Beiträge verwalten (Admin)</label>
+            <p class="error" id="member-msg" role="status"></p>
+            <button class="btn primary">Hinzufügen</button>
+          </form>
+          <div id="member-result" class="notice" hidden></div>
+          <table class="members"><thead><tr><th>Name</th><th>E-Mail</th><th>Status</th><th></th></tr></thead><tbody id="member-list"></tbody></table>
+        </div>
+      </section>
+    </main>
+
+    <nav class="tabbar" aria-label="Navigation">
+      <button data-go="offers" class="active"><span aria-hidden="true">🍷</span>Angebote</button>
+      <button data-go="news"><span aria-hidden="true">📰</span>News</button>
+      <button data-go="account"><span aria-hidden="true">👤</span>Konto</button>
+      <button data-go="admin" id="tab-admin" hidden><span aria-hidden="true">✎</span>Verwalten</button>
+    </nav>
+  </div>
+
+  <template id="tpl-card">
+    <article class="card">
+      <img class="card-img" alt="" loading="lazy">
+      <div class="card-body">
+        <div class="card-meta"></div>
+        <h3 class="card-title"></h3>
+        <p class="card-price"></p>
+        <p class="card-text"></p>
+        <div class="card-actions"></div>
+      </div>
+    </article>
+  </template>
+
+  <script src="/app.js"></script>
+</body>
+</html>

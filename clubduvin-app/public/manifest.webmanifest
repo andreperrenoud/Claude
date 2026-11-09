@@ -1,0 +1,10 @@
+{
+  "name": "Le Club du Vin · Bouiboui.vin",
+  "short_name": "Club du Vin",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5ecdd",
+  "theme_color": "#6e1c35",
+  "lang": "de-CH",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}

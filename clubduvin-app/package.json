@@ -1,0 +1,12 @@
+{
+  "name": "bouiboui-club-du-vin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mitglieder-App für Le Club du Vin von Bouiboui.vin: Login, Angebote, News.",
+  "main": "server.js",
+  "engines": { "node": ">=22.5" },
+  "scripts": {
+    "start": "node --no-warnings server.js",
+    "test": "node --no-warnings --test test/*.test.js"
+  }
+}
